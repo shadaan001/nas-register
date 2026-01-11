@@ -1,42 +1,127 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>NAS QR Scanner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
   <style>
     body {
-      background: #0f172a;
-      color: white;
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #0f172a, #020617);
       font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 30px;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
-    #reader {
-      width: 300px;
-      margin: auto;
+    .container {
+      width: 95%;
+      max-width: 420px;
+      text-align: center;
+      transform: translateY(-20px);
+      animation: fadeIn 0.8s ease;
     }
 
     h1 {
-      margin-bottom: 20px;
+      color: #38bdf8;
+      text-shadow: 0 0 15px #38bdf8;
+      margin-bottom: 8px;
+      font-size: 30px;
+      letter-spacing: 1px;
+    }
+
+    p {
+      opacity: 0.85;
+      font-size: 16px;
+      margin-bottom: 25px;
+    }
+
+    #reader {
+      border: 3px solid #38bdf8;
+      border-radius: 22px;
+      box-shadow: 0 0 30px #38bdf8;
+      overflow: hidden;
+      padding: 8px;
+      background: rgba(0,0,0,0.3);
+    }
+
+    .footer {
+      margin-top: 18px;
+      font-size: 13px;
+      opacity: 0.6;
+    }
+
+    .success {
+      display: none;
+      margin-top: 15px;
+      color: #22c55e;
+      font-weight: bold;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(-20px); }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 28px;
+      }
+      p {
+        font-size: 15px;
+      }
+      .container {
+        transform: translateY(-10px);
+      }
     }
   </style>
 </head>
 <body>
 
-  <h1>NAS QR Scanner</h1>
-  <p>Scan QR to open NAS Register</p>
+  <div class="container">
+    <h1>NAS QR SCANNER</h1>
+    <p>Point your camera at QR to open NAS Register</p>
 
-  <div id="reader"></div>
+    <div id="reader"></div>
 
-  <script src="https://unpkg.com/html5-qrcode"></script>
+    <div class="success" id="successMsg">Scan Successful ✓</div>
+
+    <div class="footer">Powered by NAS Revolution Centre</div>
+  </div>
+
+  <audio id="beep" src="https://assets.mixkit.co/sfx/preview/mixkit-positive-notification-951.mp3"></audio>
 
   <script>
     function onScanSuccess(decodedText, decodedResult) {
-      window.location.href = decodedText;
+      document.getElementById("beep").play();
+      document.getElementById("successMsg").style.display = "block";
+
+      if (navigator.vibrate) {
+        navigator.vibrate(200);
+      }
+
+      setTimeout(() => {
+        window.location.href = decodedText;
+      }, 800);
     }
 
-    var html5QrcodeScanner = new Html5QrcodeScanner(
-      "reader", { fps: 10, qrbox: 250 }
+    let html5QrcodeScanner = new Html5QrcodeScanner(
+      "reader",
+      { fps: 12, qrbox: 300 },
+      false
     );
 
     html5QrcodeScanner.render(onScanSuccess);

@@ -1,3 +1,8 @@
+// 🔒 Admin Credentials
+const ADMIN_USER = "NAS MANAGEMENT";
+const ADMIN_PASS = "NAS007@";
+
+// Firebase config
 var firebaseConfig = {
   apiKey: "AIzaSyCaaDUKV6ADRY7OQhM5Gqiwa9JxSPp_xaw",
   authDomain: "nas-register.firebaseapp.com",
@@ -10,48 +15,69 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
 
-const tableBody = document.getElementById("tableBody");
-const searchInput = document.getElementById("searchInput");
+// Login function
+function login() {
+  const u = document.getElementById("username").value;
+  const p = document.getElementById("password").value;
 
-let allData = [];
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    sessionStorage.setItem("adminLoggedIn", "true");
+    showAdmin();
+    loadData();
+  } else {
+    document.getElementById("error").style.display = "block";
+  }
+}
 
-db.collection("teachers").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
-  allData = [];
-  snapshot.forEach((doc) => {
-    allData.push({ id: doc.id, ...doc.data() });
-  });
-  renderTable(allData);
-});
+// Logout function
+function logout() {
+  sessionStorage.removeItem("adminLoggedIn");
+  location.reload();
+}
 
-function renderTable(data) {
-  tableBody.innerHTML = "";
-  data.forEach((item) => {
-    let row = `
-      <tr>
-        <td>${item.name}</td>
-        <td>${item.class}</td>
-        <td>${item.subject}</td>
-        <td>${item.remarks}</td>
-        <td>${new Date(item.createdAt.seconds * 1000).toLocaleString()}</td>
-        <td><button class="delete-btn" onclick="deleteEntry('${item.id}')">Delete</button></td>
-      </tr>
-    `;
-    tableBody.innerHTML += row;
+// Show admin panel
+function showAdmin() {
+  document.getElementById("loginBox").style.display = "none";
+  document.getElementById("adminPanel").style.display = "block";
+}
+
+// Session check
+if (sessionStorage.getItem("adminLoggedIn") === "true") {
+  showAdmin();
+  loadData();
+}
+
+// Load Firebase data
+function loadData() {
+  const tableBody = document.getElementById("tableBody");
+
+  db.collection("teachers").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
+    tableBody.innerHTML = "";
+
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+
+      let row = `
+        <tr>
+          <td>${data.name}</td>
+          <td>${data.class}</td>
+          <td>${data.subject}</td>
+          <td>${data.remarks}</td>
+          <td>${new Date(data.createdAt.seconds * 1000).toLocaleString()}</td>
+          <td>
+            <button onclick="deleteEntry('${doc.id}')">Delete</button>
+          </td>
+        </tr>
+      `;
+
+      tableBody.innerHTML += row;
+    });
   });
 }
 
-searchInput.addEventListener("input", () => {
-  const value = searchInput.value.toLowerCase();
-  const filtered = allData.filter(item =>
-    item.name.toLowerCase().includes(value) ||
-    item.class.toLowerCase().includes(value) ||
-    item.subject.toLowerCase().includes(value)
-  );
-  renderTable(filtered);
-});
-
+// Delete entry
 function deleteEntry(id) {
-  if(confirm("Delete this entry?")) {
+  if (confirm("Delete this entry?")) {
     db.collection("teachers").doc(id).delete();
   }
 }

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NAS QR Scanner</title>
+  <style>
+    body {
+      background: #0f172a;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+
+    #reader {
+      width: 300px;
+      margin: auto;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>NAS QR Scanner</h1>
+  <p>Scan QR to open NAS Register</p>
+
+  <div id="reader"></div>
+
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <script>
+    function onScanSuccess(decodedText, decodedResult) {
+      window.location.href = decodedText;
+    }
+
+    var html5QrcodeScanner = new Html5QrcodeScanner(
+      "reader", { fps: 10, qrbox: 250 }
+    );
+
+    html5QrcodeScanner.render(onScanSuccess);
+  </script>
+
+</body>
+</html>

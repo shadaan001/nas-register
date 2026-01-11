@@ -12,15 +12,16 @@ var firebaseConfig = {
   appId: "1:761059271776:web:d456f948ae741365a40f05"
 };
 
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
 
 // Login function
 function login() {
-  const u = document.getElementById("username").value;
-  const p = document.getElementById("password").value;
+  const u = document.getElementById("username").value.trim();
+  const p = document.getElementById("password").value.trim();
 
-  if (u === ADMIN_USER && p === ADMIN_PASS) {
+  if (u.toLowerCase() === ADMIN_USER.toLowerCase() && p === ADMIN_PASS) {
     sessionStorage.setItem("adminLoggedIn", "true");
     showAdmin();
     loadData();
@@ -29,7 +30,7 @@ function login() {
   }
 }
 
-// Logout function
+// Logout
 function logout() {
   sessionStorage.removeItem("adminLoggedIn");
   location.reload();
@@ -41,7 +42,7 @@ function showAdmin() {
   document.getElementById("adminPanel").style.display = "block";
 }
 
-// Session check
+// Check session
 if (sessionStorage.getItem("adminLoggedIn") === "true") {
   showAdmin();
   loadData();

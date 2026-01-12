@@ -1,11 +1,18 @@
 let currentCameraId = null;
 let cameras = [];
-let html5QrCode = new Html5Qrcode("reader");
-let imgScanner = new Html5Qrcode("temp-img-reader");
+let html5QrCode;
+let imgScanner;
+
+window.onload = () => {
+  html5QrCode = new Html5Qrcode("reader");
+  imgScanner = new Html5Qrcode("temp-img-reader");
+  startScanner();
+};
 
 function onScanSuccess(decodedText) {
   document.getElementById("beep").play();
   document.getElementById("successMsg").style.display = "block";
+
   if (navigator.vibrate) navigator.vibrate(200);
 
   setTimeout(() => {
@@ -30,9 +37,15 @@ function startScanner(cameraId = null) {
 
     html5QrCode.start(
       currentCameraId,
-      { fps: 12, qrbox: 280 },
+      { fps: 12, qrbox: 250 },
       onScanSuccess
-    );
+    ).catch(err => {
+      console.error(err);
+      alert("Camera start failed");
+    });
+  }).catch(err => {
+    console.error(err);
+    alert("Camera permission denied");
   });
 }
 
@@ -66,5 +79,3 @@ function scanFromImage() {
 
   input.click();
 }
-
-startScanner();

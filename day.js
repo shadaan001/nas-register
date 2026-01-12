@@ -13,7 +13,7 @@ var db = firebase.firestore();
 const params = new URLSearchParams(window.location.search);
 const selectedDate = params.get("date");
 
-document.getElementById("dateTitle").innerText = `Records for ${selectedDate}`;
+document.getElementById("dateTitle").innerText = "Records for " + selectedDate;
 
 const tableBody = document.getElementById("tableBody");
 
@@ -21,23 +21,23 @@ db.collection("teachers").orderBy("createdAt", "desc").onSnapshot(snapshot => {
   tableBody.innerHTML = "";
 
   snapshot.forEach(doc => {
-    const data = doc.data();
-    const dateObj = new Date(data.createdAt.seconds * 1000);
-    const dateStr = dateObj.toLocaleDateString("en-GB", {
+    const d = doc.data();
+    const t = new Date(d.createdAt.seconds * 1000);
+    const dateStr = t.toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "long",
       year: "numeric"
     });
 
     if (dateStr === selectedDate) {
-      let row = `
+      const row = `
         <tr>
-          <td>${data.name}</td>
-          <td>${data.class}</td>
-          <td>${data.subject}</td>
-          <td>${data.remarks}</td>
-          <td>${dateObj.toLocaleTimeString()}</td>
-          <td><button onclick="deleteEntry('${doc.id}')">Delete</button></td>
+          <td>${d.name}</td>
+          <td>${d.class}</td>
+          <td>${d.subject}</td>
+          <td>${d.remarks}</td>
+          <td>${t.toLocaleTimeString()}</td>
+          <td><button onclick="deleteEntry('${doc.id}')">X</button></td>
         </tr>
       `;
       tableBody.innerHTML += row;

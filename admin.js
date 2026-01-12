@@ -1,8 +1,3 @@
-// 🔒 Admin Credentials
-const ADMIN_USER = "NAS MANAGEMENT";
-const ADMIN_PASS = "NAS007@";
-
-// Firebase config
 var firebaseConfig = {
   apiKey: "AIzaSyCaaDUKV6ADRY7OQhM5Gqiwa9JxSPp_xaw",
   authDomain: "nas-register.firebaseapp.com",
@@ -12,73 +7,41 @@ var firebaseConfig = {
   appId: "1:761059271776:web:d456f948ae741365a40f05"
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
 
-// Login function
-function login() {
-  const u = document.getElementById("username").value.trim();
-  const p = document.getElementById("password").value.trim();
+const dateList = document.getElementById("dateList");
 
-  if (u.toLowerCase() === ADMIN_USER.toLowerCase() && p === ADMIN_PASS) {
-    sessionStorage.setItem("adminLoggedIn", "true");
-    showAdmin();
-    loadData();
-  } else {
-    document.getElementById("error").style.display = "block";
-  }
-}
+db.collection("teachers").orderBy("createdAt", "desc").onSnapshot(snapshot => {
+  const grouped = {};
 
-// Logout
-function logout() {
-  sessionStorage.removeItem("adminLoggedIn");
-  location.reload();
-}
-
-// Show admin panel
-function showAdmin() {
-  document.getElementById("loginBox").style.display = "none";
-  document.getElementById("adminPanel").style.display = "block";
-}
-
-// Check session
-if (sessionStorage.getItem("adminLoggedIn") === "true") {
-  showAdmin();
-  loadData();
-}
-
-// Load Firebase data
-function loadData() {
-  const tableBody = document.getElementById("tableBody");
-
-  db.collection("teachers").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
-    tableBody.innerHTML = "";
-
-    snapshot.forEach((doc) => {
-      const data = doc.data();
-
-      let row = `
-        <tr>
-          <td>${data.name}</td>
-          <td>${data.class}</td>
-          <td>${data.subject}</td>
-          <td>${data.remarks}</td>
-          <td>${new Date(data.createdAt.seconds * 1000).toLocaleString()}</td>
-          <td>
-            <button onclick="deleteEntry('${doc.id}')">Delete</button>
-          </td>
-        </tr>
-      `;
-
-      tableBody.innerHTML += row;
+  snapshot.forEach(doc => {
+    const data = doc.data();
+    const dateObj = new Date(data.createdAt.seconds * 1000);
+    const dateStr = dateObj.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric"
     });
-  });
-}
 
-// Delete entry
-function deleteEntry(id) {
-  if (confirm("Delete this entry?")) {
-    db.collection("teachers").doc(id).delete();
-  }
+    if (!grouped[dateStr]) {
+      grouped[dateStr] = [];
+    }
+    grouped[dateStr].push(doc.id);
+  });
+
+  dateList.innerHTML = "";
+
+  Object.keys(grouped).forEach(date => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <strong>📅 ${date}</strong>
+      <button onclick="openDay('${date}')">View</button>
+    `;
+    dateList.appendChild(li);
+  });
+});
+
+function openDay(date) {
+  window.location.href = `day.html?date=${encodeURIComponent(date)}`;
 }

@@ -2,9 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>NAS Admin Panel</title>
+  <title>NAS Admin – Dates</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link rel="stylesheet" href="style.css">
 
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -12,36 +11,11 @@
 </head>
 <body>
 
-<div class="card" id="loginBox">
-  <h1>Admin Login</h1>
-  <p class="subtitle">Protected Access</p>
+<div class="card">
+  <h1>NAS ADMIN</h1>
+  <p class="subtitle">Date-wise Records</p>
 
-  <input type="text" id="username" placeholder="Username">
-  <input type="password" id="password" placeholder="Password">
-
-  <button onclick="login()">Login</button>
-  <p id="error" style="color:red; display:none;">Invalid Credentials</p>
-</div>
-
-<div class="card" id="adminPanel" style="display:none; max-width:95%;">
-  <h1>NAS ADMIN PANEL</h1>
-  <p class="subtitle">Authorized Access</p>
-
-  <button onclick="logout()">Logout</button>
-
-  <table id="dataTable" style="width:100%; margin-top:20px;">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Class</th>
-        <th>Subject</th>
-        <th>Remarks</th>
-        <th>Time</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody id="tableBody"></tbody>
-  </table>
+  <ul id="dateList"></ul>
 </div>
 
 <script src="admin.js"></script>

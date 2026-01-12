@@ -5,12 +5,8 @@
   <title>NAS REGISTER</title>
   <link rel="stylesheet" href="style.css">
 
-  <!-- Firebase scripts -->
- 
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
-
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 </head>
 
 <body>
@@ -20,16 +16,15 @@
     <div class="subtitle">Teacher Entry Portal<br>by NΛS REVOLUTION CENTRE</div>
 
     <input type="text" id="name" placeholder="Teacher Name">
-    <input type="text" id="class" placeholder="Class">
-    <input type="text" id="subject" placeholder="Subject">
-    <textarea id="remarks" placeholder="Remarks"></textarea>
 
-    <button onclick="submitForm()">Submit</button>
+    <div id="entries"></div>
+
+    <button onclick="addEntry()">➕ Add Another Class</button>
+    <button onclick="submitAll()">Final Submit</button>
 
     <div class="footer">Powered by NΛS Revolution Centre</div>
   </div>
 
-  <!-- Your JS file -->
   <script src="script.js"></script>
 
 </body>

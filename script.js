@@ -7,34 +7,62 @@ var firebaseConfig = {
   appId: "1:761059271776:web:d456f948ae741365a40f05"
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-
-// Initialize Firestore
 var db = firebase.firestore();
 
-function submitForm() {
-  const name = document.getElementById("name").value;
-  const className = document.getElementById("class").value;
-  const subject = document.getElementById("subject").value;
-  const remarks = document.getElementById("remarks").value;
+const entriesDiv = document.getElementById("entries");
 
-  if (name === "" || className === "" || subject === "") {
-    alert("Fill all required fields");
+// First entry auto add
+addEntry();
+
+function addEntry() {
+  const div = document.createElement("div");
+  div.className = "entry-box";
+  div.innerHTML = `
+    <input type="text" placeholder="Class" class="class">
+    <input type="text" placeholder="Subject" class="subject">
+    <textarea placeholder="Remarks" class="remarks"></textarea>
+  `;
+  entriesDiv.appendChild(div);
+}
+
+function submitAll() {
+  const name = document.getElementById("name").value.trim();
+  const classes = document.querySelectorAll(".class");
+  const subjects = document.querySelectorAll(".subject");
+  const remarks = document.querySelectorAll(".remarks");
+
+  if (name === "") {
+    alert("Enter teacher name");
     return;
   }
 
-  db.collection("teachers").add({
-    name: name,
-    class: className,
-    subject: subject,
-    remarks: remarks,
-    createdAt: new Date()
-  })
-  .then(function() {
-    alert("Entry saved successfully!");
-  })
-  .catch(function(error) {
-    alert("Firebase Error: " + error.message);
+  let batch = db.batch();
+  let count = 0;
+
+  for (let i = 0; i < classes.length; i++) {
+    if (classes[i].value !== "" && subjects[i].value !== "") {
+      const ref = db.collection("teachers").doc();
+      batch.set(ref, {
+        name: name,
+        class: classes[i].value,
+        subject: subjects[i].value,
+        remarks: remarks[i].value,
+        createdAt: new Date()
+      });
+      count++;
+    }
+  }
+
+  if (count === 0) {
+    alert("Fill at least one class and subject");
+    return;
+  }
+
+  batch.commit().then(() => {
+    alert("All entries saved successfully!");
+    location.reload();
+  }).catch(err => {
+    alert("Error: " + err.message);
   });
 }

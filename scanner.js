@@ -1,7 +1,6 @@
-let currentCameraId = null;
-let cameras = [];
 let html5QrCode;
-let imgScanner;
+let currentCameraId;
+let cameras = [];
 let started = false;
 
 function onScanSuccess(decodedText) {
@@ -15,12 +14,11 @@ function onScanSuccess(decodedText) {
   }, 800);
 }
 
-function startScanner(cameraId = null) {
+function startScanner() {
   if (started) return;
   started = true;
 
   html5QrCode = new Html5Qrcode("reader");
-  imgScanner = new Html5Qrcode("temp-img-reader");
 
   Html5Qrcode.getCameras().then(devices => {
     if (!devices || devices.length === 0) {
@@ -30,24 +28,24 @@ function startScanner(cameraId = null) {
 
     cameras = devices;
 
-    if (!cameraId) {
-      currentCameraId = devices[devices.length - 1].id;
-    } else {
-      currentCameraId = cameraId;
-    }
+    // Prefer back camera
+    currentCameraId = devices[devices.length - 1].id;
 
     html5QrCode.start(
-      currentCameraId,
-      { fps: 12, qrbox: 250 },
+      { facingMode: "environment" },
+      {
+        fps: 10,
+        qrbox: 250
+      },
       onScanSuccess
     ).catch(err => {
       console.error(err);
-      alert("Camera start failed");
+      alert("Camera start failed: " + err);
     });
 
   }).catch(err => {
     console.error(err);
-    alert("Camera permission denied");
+    alert("Camera permission denied: " + err);
   });
 }
 
@@ -66,8 +64,9 @@ function switchCamera() {
   let nextIndex = (index + 1) % cameras.length;
 
   html5QrCode.stop().then(() => {
+    currentCameraId = cameras[nextIndex].id;
     started = false;
-    startScanner(cameras[nextIndex].id);
+    startScanner();
   });
 }
 
@@ -79,6 +78,8 @@ function scanFromImage() {
   input.onchange = e => {
     const file = e.target.files[0];
     if (!file) return;
+
+    const imgScanner = new Html5Qrcode("temp-img-reader");
 
     imgScanner.scanFile(file, true)
       .then(decodedText => onScanSuccess(decodedText))

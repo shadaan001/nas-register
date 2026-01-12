@@ -10,6 +10,9 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 </head>
+<script src="auth.js"></script>
+<script>protectPage();</script>
+
 <body>
 
 <div class="container">
@@ -18,6 +21,7 @@
 
   <div id="dateList" class="date-list"></div>
 </div>
+<button onclick="logout()">Logout</button>
 
 <script src="admin.js"></script>
 </body>

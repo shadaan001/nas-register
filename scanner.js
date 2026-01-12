@@ -1,6 +1,8 @@
 let currentCameraId = null;
-let html5QrCode = new Html5Qrcode("reader");
 let flashOn = false;
+
+const liveScanner = new Html5Qrcode("reader");
+const imageScanner = new Html5Qrcode("temp-img-reader");
 
 function onScanSuccess(decodedText) {
   document.getElementById("beep").play();
@@ -21,12 +23,12 @@ function startScanner(cameraId = null) {
     }
 
     if (!cameraId) {
-      currentCameraId = cameras[cameras.length - 1].id; // Prefer back camera
+      currentCameraId = cameras[cameras.length - 1].id;
     } else {
       currentCameraId = cameraId;
     }
 
-    html5QrCode.start(
+    liveScanner.start(
       currentCameraId,
       { fps: 12, qrbox: 300 },
       onScanSuccess
@@ -44,7 +46,7 @@ function switchCamera() {
     let index = cameras.findIndex(c => c.id === currentCameraId);
     let nextIndex = (index + 1) % cameras.length;
 
-    html5QrCode.stop().then(() => {
+    liveScanner.stop().then(() => {
       startScanner(cameras[nextIndex].id);
     });
   });
@@ -53,7 +55,7 @@ function switchCamera() {
 function toggleFlash() {
   try {
     flashOn = !flashOn;
-    html5QrCode.applyVideoConstraints({
+    liveScanner.applyVideoConstraints({
       advanced: [{ torch: flashOn }]
     });
   } catch (e) {
@@ -65,16 +67,18 @@ function scanFromImage() {
   const input = document.createElement("input");
   input.type = "file";
   input.accept = "image/*";
+
   input.onchange = e => {
     const file = e.target.files[0];
     if (!file) return;
 
-    html5QrCode.scanFile(file, true)
+    imageScanner.scanFile(file, true)
       .then(decodedText => onScanSuccess(decodedText))
-      .catch(() => alert("No QR found in image"));
+      .catch(err => alert("No QR found in image"));
   };
+
   input.click();
 }
 
-// Start on load
+// Auto start
 startScanner();

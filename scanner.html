@@ -22,27 +22,18 @@
       width: 95%;
       max-width: 420px;
       text-align: center;
-      transform: translateY(-15px);
     }
 
     h1 {
       color: #38bdf8;
       text-shadow: 0 0 15px #38bdf8;
-      font-size: 30px;
-      margin-bottom: 6px;
-    }
-
-    p {
-      opacity: 0.8;
-      font-size: 16px;
-      margin-bottom: 18px;
+      font-size: 28px;
     }
 
     #reader {
       border: 3px solid #38bdf8;
-      border-radius: 22px;
+      border-radius: 20px;
       box-shadow: 0 0 30px #38bdf8;
-      overflow: hidden;
       padding: 8px;
       background: rgba(0,0,0,0.3);
     }
@@ -61,47 +52,38 @@
       padding: 10px;
       border-radius: 10px;
       cursor: pointer;
-      box-shadow: 0 0 12px rgba(0,198,255,0.6);
       font-size: 14px;
+      box-shadow: 0 0 12px rgba(0,198,255,0.6);
     }
 
     .success {
       display: none;
-      margin-top: 12px;
+      margin-top: 10px;
       color: #22c55e;
       font-weight: bold;
-    }
-
-    .footer {
-      margin-top: 14px;
-      font-size: 12px;
-      opacity: 0.6;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>NAS QR SCANNER</h1>
-    <p>Scan QR to open NAS Register</p>
+<div class="container">
+  <h1>NAS QR SCANNER</h1>
+  <p>Scan QR to open NAS Register</p>
 
-    <div id="reader"></div>
+  <div id="reader"></div>
 
-    <div class="controls">
-      <button class="btn" onclick="switchCamera()">Switch Camera</button>
-      <button class="btn" onclick="toggleFlash()">Flash</button>
-      <button class="btn" onclick="scanFromImage()">Scan Image</button>
-    </div>
-
-    <div class="success" id="successMsg">Scan Successful ✓</div>
-
-    <div class="footer">Powered by NAS Revolution Centre</div>
+  <div class="controls">
+    <button class="btn" onclick="switchCamera()">Switch</button>
+    <button class="btn" onclick="scanFromImage()">Scan Image</button>
   </div>
 
-  <audio id="beep" src="https://assets.mixkit.co/sfx/preview/mixkit-positive-notification-951.mp3"></audio>
-  <div id="temp-img-reader" style="display:none;"></div>
+  <div class="success" id="successMsg">Scan Successful ✓</div>
+</div>
 
-  <script src="scanner.js"></script>
+<audio id="beep" src="https://assets.mixkit.co/sfx/preview/mixkit-positive-notification-951.mp3"></audio>
 
+<div id="temp-img-reader" style="display:none;"></div>
+
+<script src="scanner.js"></script>
 </body>
 </html>

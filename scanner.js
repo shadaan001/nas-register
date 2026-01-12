@@ -1,13 +1,11 @@
 let currentCameraId = null;
-let flashOn = false;
-
-const liveScanner = new Html5Qrcode("reader");
-const imageScanner = new Html5Qrcode("temp-img-reader");
+let cameras = [];
+let html5QrCode = new Html5Qrcode("reader");
+let imgScanner = new Html5Qrcode("temp-img-reader");
 
 function onScanSuccess(decodedText) {
   document.getElementById("beep").play();
   document.getElementById("successMsg").style.display = "block";
-
   if (navigator.vibrate) navigator.vibrate(200);
 
   setTimeout(() => {
@@ -16,51 +14,40 @@ function onScanSuccess(decodedText) {
 }
 
 function startScanner(cameraId = null) {
-  Html5Qrcode.getCameras().then(cameras => {
-    if (!cameras || cameras.length === 0) {
+  Html5Qrcode.getCameras().then(devices => {
+    if (!devices || devices.length === 0) {
       alert("No camera found");
       return;
     }
 
+    cameras = devices;
+
     if (!cameraId) {
-      currentCameraId = cameras[cameras.length - 1].id;
+      currentCameraId = devices[devices.length - 1].id;
     } else {
       currentCameraId = cameraId;
     }
 
-    liveScanner.start(
+    html5QrCode.start(
       currentCameraId,
-      { fps: 12, qrbox: 300 },
+      { fps: 12, qrbox: 280 },
       onScanSuccess
     );
   });
 }
 
 function switchCamera() {
-  Html5Qrcode.getCameras().then(cameras => {
-    if (cameras.length < 2) {
-      alert("Only one camera available");
-      return;
-    }
-
-    let index = cameras.findIndex(c => c.id === currentCameraId);
-    let nextIndex = (index + 1) % cameras.length;
-
-    liveScanner.stop().then(() => {
-      startScanner(cameras[nextIndex].id);
-    });
-  });
-}
-
-function toggleFlash() {
-  try {
-    flashOn = !flashOn;
-    liveScanner.applyVideoConstraints({
-      advanced: [{ torch: flashOn }]
-    });
-  } catch (e) {
-    alert("Flash not supported on this device");
+  if (cameras.length < 2) {
+    alert("Only one camera available");
+    return;
   }
+
+  let index = cameras.findIndex(cam => cam.id === currentCameraId);
+  let nextIndex = (index + 1) % cameras.length;
+
+  html5QrCode.stop().then(() => {
+    startScanner(cameras[nextIndex].id);
+  });
 }
 
 function scanFromImage() {
@@ -72,13 +59,12 @@ function scanFromImage() {
     const file = e.target.files[0];
     if (!file) return;
 
-    imageScanner.scanFile(file, true)
+    imgScanner.scanFile(file, true)
       .then(decodedText => onScanSuccess(decodedText))
-      .catch(err => alert("No QR found in image"));
+      .catch(() => alert("No QR found in image"));
   };
 
   input.click();
 }
 
-// Auto start
 startScanner();

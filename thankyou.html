@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Thank You | NAS Register</title>
+  <link rel="stylesheet" href="thankyou.css">
+</head>
+<body>
+
+  <div class="thankyou-container">
+    <div class="card">
+      <h1>✔ Submission Successful</h1>
+      <p>Thank you for your valuable entry.</p>
+      <p>Your response has been securely recorded.</p>
+
+      <div class="glow-line"></div>
+
+      <h2>NAS REVOLUTION CENTRE</h2>
+      <p class="tagline">Building the Future of Education</p>
+
+      <button onclick="goHome()">Back to Home</button>
+
+      <p class="redirect">Redirecting automatically in <span id="count">5</span> seconds...</p>
+    </div>
+  </div>
+
+  <script>
+    let sec = 5;
+    const counter = document.getElementById("count");
+
+    const timer = setInterval(() => {
+      sec--;
+      counter.innerText = sec;
+      if (sec === 0) {
+        clearInterval(timer);
+        window.location.href = "index.html";
+      }
+    }, 1000);
+
+    function goHome() {
+      window.location.href = "index.html";
+    }
+  </script>
+
+</body>
+</html>

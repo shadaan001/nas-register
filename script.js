@@ -60,9 +60,9 @@ function submitAll() {
   }
 
   batch.commit().then(() => {
-    alert("All entries saved successfully!");
-    location.reload();
-  }).catch(err => {
-    alert("Error: " + err.message);
-  });
+  window.location.href = "thankyou.html";
+}).catch(err => {
+  alert("Error: " + err.message);
+});
+
 }

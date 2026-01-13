@@ -72,3 +72,6 @@ function exportThisDay() {
 
   XLSX.writeFile(wb, `NAS_${selectedDate}.xlsx`);
 }
+function goBack() {
+  window.location.href = "admin.html";
+}

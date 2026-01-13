@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>NAS Admin Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link rel="stylesheet" href="admin.css">
 
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -16,12 +15,32 @@
 
 <body>
 
-<!-- Floating Logout -->
 <button class="logout-btn" onclick="logout()">Logout</button>
 
 <div class="container">
   <h1>NAS Daily Records</h1>
-  <p class="subtitle">Click a date to view full table</p>
+  <p class="subtitle">View by Date or Teacher</p>
+  <button class="attendance-btn" onclick="goToAttendance()">
+  📊 Attendance System
+</button>
+
+  <!-- Teacher Panel -->
+  <div class="teacher-panel">
+    <h3>Teacher Report</h3>
+    <div class="teacher-filter-row">
+      <select id="teacherSelect">
+        <option value="">-- Select Teacher --</option>
+      </select>
+      <button class="view-report-btn" onclick="filterByTeacher()">View</button>
+    </div>
+  </div>
+  <button id="clearFilterBtn" class="clear-btn" onclick="clearTeacherFilter()" style="display:none;">
+  ← Back to Date View
+</button>
+
+
+  <div id="teacherStats" class="teacher-stats" style="display:none;"></div>
+  <div id="teacherTable" class="teacher-table" style="display:none;"></div>
 
   <div id="dateList" class="date-list"></div>
 </div>

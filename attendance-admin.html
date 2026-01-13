@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Attendance Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <link rel="stylesheet" href="attendance-admin.css">
+</head>
+<body>
+
+<div class="container">
+  <h2>Teacher Attendance Dashboard</h2>
+
+  <div class="filter-box">
+    <select id="teacherSelect">
+      <option value="">Select Teacher</option>
+    </select>
+    <button id="viewBtn">View Report</button>
+  </div>
+
+  <div id="stats" class="stats-box"></div>
+
+  <div class="charts">
+    <div class="chart-box">
+      <canvas id="percentChart"></canvas>
+    </div>
+
+    <div class="chart-box">
+      <canvas id="barChart"></canvas>
+    </div>
+  </div>
+
+  <div id="attendanceTable" class="table-box"></div>
+</div>
+
+<script src="attendance-admin.js"></script>
+</body>
+</html>

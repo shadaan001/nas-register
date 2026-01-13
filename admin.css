@@ -9,27 +9,84 @@ body {
   color: white;
 }
 
-/* Center card */
 .container {
   background: rgba(0, 0, 0, 0.45);
   padding: 30px 25px;
   border-radius: 16px;
   width: 90%;
-  max-width: 420px;
+  max-width: 450px;
   text-align: center;
   box-shadow: 0 0 35px rgba(0, 200, 255, 0.3);
-  border: 1px solid rgba(0, 200, 255, 0.25);
 }
 
-.container h1 {
+h1 {
   color: #00e1ff;
-  margin-bottom: 5px;
 }
 
 .subtitle {
   font-size: 14px;
   opacity: 0.8;
   margin-bottom: 20px;
+}
+
+.teacher-panel {
+  background: rgba(0,0,0,0.4);
+  padding: 16px;
+  border-radius: 14px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 15px rgba(0,200,255,0.2);
+}
+
+.teacher-panel h3 {
+  color: #00eaff;
+  margin-bottom: 10px;
+}
+
+.teacher-filter-row {
+  display: flex;
+  gap: 10px;
+}
+
+.teacher-filter-row select {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+}
+
+.view-report-btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  color: white;
+  cursor: pointer;
+}
+
+.teacher-stats {
+  background: rgba(0,0,0,0.4);
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  text-align: left;
+  line-height: 1.7;
+}
+
+.teacher-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.teacher-table th, .teacher-table td {
+  padding: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  text-align: left;
+}
+
+.teacher-table th {
+  color: #00eaff;
 }
 
 .date-list {
@@ -41,30 +98,20 @@ body {
 .date-item {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   background: rgba(255,255,255,0.06);
   padding: 12px 14px;
   border-radius: 10px;
-  border: 1px solid rgba(0,200,255,0.2);
 }
 
-.date-item span {
-  font-size: 14px;
-}
-
-/* View Button */
 .view-btn {
   background: linear-gradient(135deg, #00c6ff, #0072ff);
   border: none;
   color: white;
   padding: 6px 16px;
   border-radius: 20px;
-  font-size: 13px;
   cursor: pointer;
-  box-shadow: 0 0 12px rgba(0,200,255,0.6);
 }
 
-/* Logout Button */
 .logout-btn {
   position: fixed;
   top: 16px;
@@ -74,14 +121,34 @@ body {
   border: none;
   padding: 10px 18px;
   border-radius: 25px;
-  font-size: 13px;
   cursor: pointer;
-  box-shadow: 0 0 18px rgba(255, 75, 43, 0.6);
+}
+.clear-btn {
+  margin-bottom: 15px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #444, #222);
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.attendance-btn {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #00f2ff, #0066ff);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(0, 200, 255, 0.6);
   transition: 0.3s;
-  z-index: 9999;
 }
 
-.logout-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 25px rgba(255, 75, 43, 0.9);
+.attendance-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 30px rgba(0, 200, 255, 0.9);
 }

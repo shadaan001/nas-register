@@ -60,9 +60,40 @@ function submitAll() {
   }
 
   batch.commit().then(() => {
+  saveAttendance(name);   // 👈 ADD THIS
   window.location.href = "thankyou.html";
-}).catch(err => {
-  alert("Error: " + err.message);
 });
 
+
 }
+function saveAttendance(name) {
+  const now = new Date();
+
+  const dateStr = now.toLocaleDateString("en-GB");
+  const dayStr = now.toLocaleString("en-US", { weekday: "long" });
+  const timeStr = now.toLocaleTimeString();
+
+  const todayKey = dateStr + "_" + name;
+
+  // Ek din me sirf 1 attendance
+  db.collection("attendance")
+    .where("key", "==", todayKey)
+    .get()
+    .then(snapshot => {
+      if (!snapshot.empty) {
+        // Already marked today
+        return;
+      }
+
+      db.collection("attendance").add({
+        name: name,
+        date: dateStr,
+        day: dayStr,
+        time: timeStr,
+        status: "Present",
+        key: todayKey,
+        createdAt: new Date()
+      });
+    });
+}
+

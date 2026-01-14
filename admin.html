@@ -20,6 +20,12 @@
 <div class="container">
   <h1>NAS Daily Records</h1>
   <p class="subtitle">View by Date or Teacher</p>
+  <div class="range-toggle">
+  <button onclick="setRange('today')" id="btnToday" class="active">Today</button>
+  <button onclick="setRange('week')" id="btnWeek">This Week</button>
+  <button onclick="setRange('month')" id="btnMonth">This Month</button>
+</div>
+
   <button class="attendance-btn" onclick="goToAttendance()">
   📊 Attendance System
 </button>

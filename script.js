@@ -12,7 +12,35 @@ var db = firebase.firestore();
 
 const entriesDiv = document.getElementById("entries");
 
-// First entry auto add
+const CORRECT_PIN = "160126";
+
+// ===== Male Voice =====
+let selectedVoice = null;
+
+function loadMaleVoice() {
+  const voices = window.speechSynthesis.getVoices();
+  selectedVoice = voices.find(v =>
+    v.name.toLowerCase().includes("google") ||
+    v.name.toLowerCase().includes("microsoft")
+  );
+}
+window.speechSynthesis.onvoiceschanged = loadMaleVoice;
+
+function speak(text) {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+
+  const msg = new SpeechSynthesisUtterance(text);
+  msg.rate = 0.8;
+  msg.pitch = 0.4;
+  msg.volume = 1;
+  msg.lang = "en-IN";
+
+  if (selectedVoice) msg.voice = selectedVoice;
+  window.speechSynthesis.speak(msg);
+}
+
+// ===== First Entry =====
 addEntry();
 
 function addEntry() {
@@ -26,6 +54,25 @@ function addEntry() {
   entriesDiv.appendChild(div);
 }
 
+// ===== PIN FLOW =====
+function requestPin() {
+  document.getElementById("pinOverlay").style.display = "flex";
+}
+
+function verifyPin() {
+  const input = document.getElementById("pinInput").value;
+  const error = document.getElementById("pinError");
+
+  if (input === CORRECT_PIN) {
+    document.getElementById("pinOverlay").style.display = "none";
+    submitAll();
+  } else {
+    error.style.display = "block";
+    speak("Invalid pin");
+  }
+}
+
+// ===== FINAL SUBMIT =====
 function submitAll() {
   const name = document.getElementById("name").value.trim();
   const classes = document.querySelectorAll(".class");
@@ -60,12 +107,17 @@ function submitAll() {
   }
 
   batch.commit().then(() => {
-  saveAttendance(name);   // 👈 ADD THIS
-  window.location.href = "thankyou.html";
-});
+    saveAttendance(name);
 
+    speak("Thank you. Your report loaded successfully.");
 
+    setTimeout(() => {
+      window.location.href = "thankyou.html";
+    }, 1200);
+  });
 }
+
+// ===== ATTENDANCE =====
 function saveAttendance(name) {
   const now = new Date();
 
@@ -75,15 +127,11 @@ function saveAttendance(name) {
 
   const todayKey = dateStr + "_" + name;
 
-  // Ek din me sirf 1 attendance
   db.collection("attendance")
     .where("key", "==", todayKey)
     .get()
     .then(snapshot => {
-      if (!snapshot.empty) {
-        // Already marked today
-        return;
-      }
+      if (!snapshot.empty) return;
 
       db.collection("attendance").add({
         name: name,
@@ -96,4 +144,3 @@ function saveAttendance(name) {
       });
     });
 }
-

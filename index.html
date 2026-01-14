@@ -7,25 +7,80 @@
 
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+  <style>
+    .pin-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .pin-box {
+      background: #020617;
+      padding: 25px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 320px;
+      box-shadow: 0 0 30px #38bdf8;
+      border: 2px solid #38bdf8;
+      text-align: center;
+      color: white;
+    }
+
+    .pin-box h2 {
+      color: #38bdf8;
+    }
+
+    .pin-input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 18px;
+      text-align: center;
+      letter-spacing: 4px;
+      margin-bottom: 10px;
+    }
+
+    .pin-error {
+      color: red;
+      display: none;
+      font-size: 14px;
+    }
+  </style>
 </head>
 
 <body>
 
-  <div class="card">
-    <h1>NAS REGISTER</h1>
-    <div class="subtitle">Teacher Entry Portal<br>by NΛS REVOLUTION CENTRE</div>
-
-    <input type="text" id="name" placeholder="Teacher Name">
-
-    <div id="entries"></div>
-
-    <button onclick="addEntry()">➕ Add Another Class</button>
-    <button onclick="submitAll()">Final Submit</button>
-
-    <div class="footer">Powered by NΛS Revolution Centre</div>
+<!-- PIN POPUP -->
+<div class="pin-overlay" id="pinOverlay">
+  <div class="pin-box">
+    <h2>Enter Security PIN</h2>
+    <input type="password" id="pinInput" class="pin-input" maxlength="6" placeholder="******">
+    <button onclick="verifyPin()">Unlock & Submit</button>
+    <div class="pin-error" id="pinError">Wrong PIN</div>
   </div>
+</div>
 
-  <script src="script.js"></script>
+<div class="card">
+  <h1>NAS REGISTER</h1>
+  <div class="subtitle">Teacher Entry Portal<br>by NΛS REVOLUTION CENTRE</div>
+
+  <input type="text" id="name" placeholder="Teacher Name">
+
+  <div id="entries"></div>
+
+  <button onclick="addEntry()">➕ Add Another Class</button>
+  <button onclick="requestPin()">Final Submit</button>
+
+  <div class="footer">Powered by NΛS Revolution Centre</div>
+</div>
+
+<script src="script.js"></script>
 
 </body>
 </html>
